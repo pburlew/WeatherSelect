@@ -1,9 +1,13 @@
+// var iconcode = weather[0].icon;
+// var iconurl = "http://openweathermap.org/img/w/" + weather[0].icon; + ".png";
+
+
 
 $(document).ready(function() {
-debugger
+
 //event listeners (only 2 in whole project)
-$("search-button").on("click", function (){
-    console.log("ive been clicked au reviour bitch")
+$("#search-button").on("click", function (){
+    console.log("ive been clicked au reviour bitch");
     event.preventDefault();
     var searchValue = $("input").val().toUpperCase().trim();
     searchWeather(searchValue);
@@ -36,16 +40,16 @@ function searchWeather(searchValue) {
             $("#today").empty();
 
             //adding HTML items for current weather 
-            // var title = $("<h3>").addClass("card-title").text(data.name + " ( " + new Date().toLocaleDateString);
+            var title = $("<h3>").addClass("card-title").text(data.name + " ( " + new Date().toLocaleDateString);
             var card = $("<div>").addClass("card");
-            var wind = $("<p>").addClass("card-text").text("Wind Speed: " +data.wind.speed + "MPH");
-            // var humid = $("<p>").addClass("card-text").text("Humidity: " = data.main.humidity + "%");
+            var wind = $("<p>").addClass("card-text").text("Wind Speed: " + data.wind.speed + "MPH");
+            var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity + "%");
             var temp = $("<p>").addClass("card-text").text("Temperature: " + data.main.temp + " F");
             var cardBody = $("<div>").addClass("card-body");
-            // var img =
+            // var img = $('#wicon').attr('src', "http://openweathermap.org/img/w/" + weather[0].icon + ".png");
 
             //adding to page 
-            title.append(img);
+            // title.append(img);
             cardBody.append(title, temp, humid, wind);
             card.append(cardBody);
             $("#today").append(card);
