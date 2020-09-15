@@ -1,11 +1,13 @@
 
 $(document).ready(function() {
-
+debugger
 //event listeners (only 2 in whole project)
 $("search-button").on("click", function (){
+    console.log("ive been clicked au reviour bitch")
     event.preventDefault();
     var searchValue = $("input").val().toUpperCase().trim();
-
+    searchWeather(searchValue);
+    
 
 })
 
@@ -37,9 +39,9 @@ function searchWeather(searchValue) {
             // var title = $("<h3>").addClass("card-title").text(data.name + " ( " + new Date().toLocaleDateString);
             var card = $("<div>").addClass("card");
             var wind = $("<p>").addClass("card-text").text("Wind Speed: " +data.wind.speed + "MPH");
-            var humid = $("<p>").addClass("card-text").text("Humidity: " = data.main.humidity + "%");
+            // var humid = $("<p>").addClass("card-text").text("Humidity: " = data.main.humidity + "%");
             var temp = $("<p>").addClass("card-text").text("Temperature: " + data.main.temp + " F");
-            var cardBody = $("<div>").addClass("card-body";)
+            var cardBody = $("<div>").addClass("card-body");
             // var img =
 
             //adding to page 
@@ -52,7 +54,7 @@ function searchWeather(searchValue) {
             getUVIndex(data.coord.lat, data.coord.lon);
         }
     })
-})
+}
 
 function getForecast(searchValue){
     // $.ajax({
