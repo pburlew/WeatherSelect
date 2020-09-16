@@ -1,5 +1,3 @@
-// var iconcode = weather[0].icon;
-// var iconurl = "http://openweathermap.org/img/w/" + weather[0].icon; + ".png";
 
 
 
@@ -11,7 +9,6 @@ $("#search-button").on("click", function (){
     event.preventDefault();
     var searchValue = $("input").val().toUpperCase().trim();
     searchWeather(searchValue);
-    
 
 })
 
@@ -22,12 +19,30 @@ $(".document").on("click", "li", function(){
     resetGlobalVariables();
     searchCity(cityName);
     console.log("FUCK")
-
     
 })
 
-//functions
+
+// //functions
+
+//this function uses moment.js to add current day and time in the header
+function showCurrentDay(){
+
+    $("#timedate-reader").text(moment().format('MMMM Do YYYY, h:mm:ss a'))
+}
+showCurrentDay();
+
+//this function adds a row to the history div to show previouly searched cities
 function makeRow(text){
+
+        $("#history").removeClass("hide");
+        //showing the last 5 cities searched
+        for (var i = 0; i < 5; i++) {
+            
+            //adding to list
+            $("#history").append("list-group history");
+            
+        }
 
 }
 
@@ -53,6 +68,7 @@ function searchWeather(searchValue) {
             var card = $("<div>").addClass("card");
             var wind = $("<p>").addClass("card-text").text("Wind Speed: " + data.wind.speed + "MPH");
             var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity + "%");
+            // var kToF = ((data.main.temp − 273.15) × 9/5 + 32)
             var temp = $("<p>").addClass("card-text").text("Temperature: " + data.main.temp + " F");
             var cardBody = $("<div>").addClass("card-body");
             // var img = $('#wicon').attr('src', "http://openweathermap.org/img/w/" + weather[0].icon + ".png");
@@ -83,10 +99,10 @@ function getForecast(searchValue){
             var card = $("<div>").addClass("card");
             var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity + "%");
             var temp = $("<p>").addClass("card-text").text("Temperature: " + data.main.temp + " F");
-            var cardBody = $("<div>").addClass("card-body");
+            var forecastBody = $("<div>").addClass("forecast-body");
 
-            cardBody.append(title, temp, humid, wind);
-            card.append(cardBody);
+            forecastBody.append(title, temp, humid);
+            card.append(forecastBody);
             $("#forecast").append(card);
             console.log("#forecast");
         }

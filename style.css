@@ -1,9 +1,33 @@
 header{
-    background-color: darkslateblue;
+    background-color: #316b54;
+    border-radius: 25px;
     color: white;
     font-size: 60px;
     text-align: center;
     padding: 30px;
-    margin: 0;
+    margin: 20px;
 }
 
+body{
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.container-fluid{
+    border-radius: 25px;
+    background-color: #316b54;
+    padding: 30px;
+    margin: 20px;
+    
+}
+
+#forecast{
+    border-radius: 25px;
+    background-color: #316b54;
+    padding: 30px;
+    margin: 20px;
+}
+
+
+#search-button{
+    background-color: #316b54;
+}
