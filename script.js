@@ -3,6 +3,7 @@
 
 $(document).ready(function() {
 
+
 //event listeners (only 2 in whole project)- WORKING
 $("#search-button").on("click", function (){
     console.log("ive been clicked au reviour bitch");
@@ -14,10 +15,11 @@ $("#search-button").on("click", function (){
 
 //add to history- NOT WORKING
 $(".document").on("click", function(){
-    var pastSearch = $(this).text();
-    
-    pastSearch = $("<li>").addClass("li");
-    console.log("FUCK")
+    // var pastSearch = $(this).text();
+    var pastSearch = $("<li>").addClass("li-text").text(searchValue);
+    $("#history").append(pastSearch);
+    // pastSearch = $("<li>").addClass("li");
+    console.log("history is working");
     
 })
 
@@ -39,13 +41,13 @@ function makeRow(text){
         for (var i = 0; i < 5; i++) {
             
             //adding to list
-            $("#history").append("list-group history");
+            $("<ul>").append("list-group history");
             
         }
 
 }
 
-//searches current weather- WORKING
+//searches current weather- WORKING except icons 
 function searchWeather(searchValue) {
     $.ajax({
         //connecting to API for current weather
@@ -62,6 +64,7 @@ function searchWeather(searchValue) {
             }
             //make sure old content is emptied 
             $("#today").empty();
+            $("#today").html("<h4> Current Weather: </h4>").append("<div class=\"row\">");
 
             //adding HTML items for current weather 
             var title = $("<h3>").addClass("card-title").text(data.name);
@@ -86,7 +89,7 @@ function searchWeather(searchValue) {
     })
 }
 
-// searches 5day forecast- NOT WORKING
+// searches 5day forecast- WORKING except icons
 function getForecast(searchValue){
     $.ajax({
         //connect to forecast API
@@ -106,15 +109,15 @@ function getForecast(searchValue){
             if(data.list[i].dt_txt.indexOf("12:00:00") !== -1) {
             
             var addToCol = $("<div>").addClass("col-md-2");
-            var card = $("<div>").addClass("card bg-primary text-white");
+            var cardForecast = $("<div>").addClass("card bg-primary text-white");
             var titleForecast = $("<h5>").addClass("card-title").text(data.name);
-            var cardForecast = $("<div>").addClass("card");
+            // var cardForecast = $("<div>").addClass("card");
             var humidForecast = $("<p>").addClass("card-text").text("Humidity: " + data.list[i].main.humidity + "%");
             var tempForecast = $("<p>").addClass("card-text").text("Temperature: " + data.list[i].main.temp_max + " F");
             var forecastBody = $("<div>").addClass("forecast-body p-2");
             var imgForecast = $("#wicon").attr("src", "http://openweathermap.org/img/w/" + data.list[i].weather.icon + ".png");
             
-            addToCol.append(card.append(forecastBody.append(titleForecast, imgForecast, tempForecast, humidForecast)));
+            addToCol.append(cardForecast.append(forecastBody.append(titleForecast, imgForecast, tempForecast, humidForecast)));
 
             $("#forecast .row").append(addToCol);
 

@@ -1,5 +1,5 @@
 header{
-    background-color: #316b54;
+    background-color: #0b64a3;
     border-radius: 25px;
     color: white;
     font-size: 60px;
@@ -14,22 +14,25 @@ body{
 
 .container-fluid{
     border-radius: 25px;
-    background-color: #316b54;
+    background-color:#0b64a3;
     padding: 30px;
     margin: 20px;
     
 }
 
+.card{
+    background-color: #73b6e6;
+}
 
 
-#forecast{
+#forecast, #today{
     border-radius: 25px;
-    background-color: #316b54;
+    background-color:white;
     padding: 30px;
     margin: 20px;
 }
 
 
 #search-button{
-    background-color: #316b54;
+    background-color: #0b64a3;
 }
