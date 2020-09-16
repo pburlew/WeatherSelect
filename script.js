@@ -96,19 +96,31 @@ function getForecast(searchValue){
         success: function(data){
         //make sure old content is emptied 
          $("#forecast").empty();
-            for (var i = 0; i > 5; i++){
 
-            var titleForecast = $("<h3>").addClass("card-title").text(data.name);
+         //build new forecast cards by grabbing html elements
+         $("#forecast").html("<h4> 5 Day Forecast: </h4>").append("<div class=\"row\">");
+
+
+            for (var i = 0; i < data.list.length; i++){
+            
+            if(data.list[i].dt_txt.indexOf("12:00:00") !== -1) {
+            
+            var addToCol = $("<div>").addClass("col-md-2");
+            var card = $("<div>").addClass("card bg-primary text-white");
+            var titleForecast = $("<h5>").addClass("card-title").text(data.name);
             var cardForecast = $("<div>").addClass("card");
-            var humidForecast = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity + "%");
-            var tempForecast = $("<p>").addClass("card-text").text("Temperature: " + data.main.temp + " F");
-            var forecastBody = $("<div>").addClass("forecast-body");
-            var imgForecast = $("#wicon").attr("src", "http://openweathermap.org/img/w/" + data.icon + ".png");
+            var humidForecast = $("<p>").addClass("card-text").text("Humidity: " + data.list[i].main.humidity + "%");
+            var tempForecast = $("<p>").addClass("card-text").text("Temperature: " + data.list[i].main.temp_max + " F");
+            var forecastBody = $("<div>").addClass("forecast-body p-2");
+            var imgForecast = $("#wicon").attr("src", "http://openweathermap.org/img/w/" + data.list[i].weather.icon + ".png");
+            
+            addToCol.append(card.append(forecastBody.append(titleForecast, imgForecast, tempForecast, humidForecast)));
 
-            forecastBody.append(titleForecast, tempForecast, humidForecast, imgForecast);
-            cardForecast.append(forecastBody);
-            $("#forecast").append(cardForecast);
+            $("#forecast .row").append(addToCol);
+
+        
             console.log("FORECAST READ AND ADDED");
+            }
             }
         }
     })
