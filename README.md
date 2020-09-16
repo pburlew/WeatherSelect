@@ -4,5 +4,5 @@ This project is a weather forecast app for cities around the globe. Type your ci
 
 LINK: https://pburlew.github.io/Weather-App/
 
-Images: /Users/paigeburlew/development/Weather-App/Screen Shot 2020-09-16 at 6.04.46 PM.png
+
 
