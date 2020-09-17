@@ -48,7 +48,7 @@ function searchWeather(searchValue) {
     $.ajax({
         //connecting to API for current weather
         method: "GET",
-        url: "http://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appid=4c023acf398932e1b43cd03002ad8542",
+        url: "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appid=4c023acf398932e1b43cd03002ad8542",
         dataType: "json",
         success: function(data){
             console.log(searchValue)
@@ -92,7 +92,7 @@ function getForecast(searchValue){
     $.ajax({
         //connect to forecast API
         method: "GET",
-        url: "http://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=4c023acf398932e1b43cd03002ad8542",
+        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=4c023acf398932e1b43cd03002ad8542",
         dataType: "json",
         success: function(data){
             console.log(data)
