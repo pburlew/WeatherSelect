@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
+    <title>Personal Weather Dashboard</title>
+
     <!-- bootstrap cdn -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
       <!-- Font Awesome CSS Icons  -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
     <header>
         Weather Dashboard
@@ -19,29 +22,43 @@
     <!-- input form (container)and history -->
     <div class="container-fluid">
         <div class="row">
-            <aside class="col-lg-3 bg-light">
+            <div class="col-sm-3 bg-light">
                 <h5>Search for a City:</h5>
-                <div class="form-inline form-group">
-                    <input class="form-control" type="text" id="search-value"/>
-                    <button class="btn btn-primary" id="search-button"><i class="fa fa-search"></i>SEARCH</button>
+                <div class="searchBar input-group md-form form-sm form-2 pl-0">
+                    <input class="searchField form-control my-0 py-1 amber-border" type="text" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="searchbtn btn btn-sm waves-effect input-group-text amber lighten-3" type="submit"><i class="fas fa-search text-grey"
+                            aria-hidden="true"></i></button>
                 </div>
-
-                <ul class="history">Search History:</ul>
-                
-            </aside>
-        
-            <!-- forecast div, will be empty until a city is searched -->
-            <div class="col-lg-9">
-                <div id="today"></div>
-                <div id="forecast"></div>
-                <div id="icon"><img id="wicon" src="" alt="  "></div>
-
             </div>
 
+                <p class= "history"> Search History:</p>
+                
+            
+        
+            <!-- forecast div, will be empty until a city is searched -->
+
+            <div class="col-lg-9 searchResults">
+                <h3>Current Weather:</h3>
+                <div class= "currentWeather">
+                </div>
+                <h3>5 Day Forecast:</h3>
+                <div class= "container-fluid">
+                    <div class = "row forecast">
+
+                    </div>
+                </div>
+                <!-- <div id="today"></div>
+                <div id="forecast"></div>
+                <div id="icon"><img id="wicon" src="" alt="  "></div> -->
+
+            </div>
+        </div>
         </div>
     </div>
     <script src= "https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src= "script.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>

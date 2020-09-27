@@ -1,5 +1,11 @@
 
-
+// vars (called using jquery and class selectors)
+var currentWeatherEl = $(".currentWeather");
+var forecastEl = $(".forecast");
+var historyEl = $(".history");
+var userInputEl = $(".searchField");
+var searchButton = $(".searchbtn");
+var searchedArray = [];
 
 $(document).ready(function() {
 
@@ -13,9 +19,10 @@ $("#search-button").on("click", function (){
 
 })
 
-function loadPrevSearched () {
-    searchedArray = [];
-    searchedArray = JSON.parse(window.localStorage.getItem("history"));
+function loadHistory () {
+    // clear history
+    historyEl.empty();
+    searchedArray= JSON.parse(localStorage.getItem("searched"));
     //if no previous searched cities, then stop/ do nothing
     if (searchedArray === null) {
         return
@@ -25,7 +32,7 @@ function loadPrevSearched () {
             var prevSearchedBtn = $("<button>").text(searchedArray[i]).attr({
                 class: "psearch",
             })
-            previousSearchesEl.append(prevSearchedBtn);
+            historyEl.append(prevSearchedBtn);
         }
     }
 
