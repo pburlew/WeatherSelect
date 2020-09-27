@@ -6,8 +6,9 @@ var historyEl = $(".history");
 var userInputEl = $(".searchField");
 var searchButton = $(".searchbtn");
 var searchedArray = [];
+var citySearch = '';
 
-$(document).ready(function() {
+
 
 
 //event listeners (only 2 in whole project)- WORKING
@@ -15,10 +16,12 @@ $("#search-button").on("click", function (){
     console.log("ive been clicked au reviour bitch");
     event.preventDefault();
     var searchValue = $("input").val().toUpperCase().trim();
-    searchWeather(searchValue);
+    searchInputRun(searchValue);
 
 })
 
+
+// DONE DONT TOUCH
 function loadHistory () {
     // clear history
     historyEl.empty();
@@ -51,7 +54,11 @@ showCurrentDay();
 
 
 //searches current weather
-function searchWeather(searchValue) {
+function searchInputRun() {
+    // empty page before starting
+    currentWeatherEl.empty();
+    forecastEl.empty();
+
     $.ajax({
         //connecting to API for current weather
         method: "GET",
@@ -148,7 +155,7 @@ function gtUVindex(lat, lon){
 var history = JSON.parse(window.localStorage.getItem("history")) || [];
 
 if (history.length >0) {
-    searchWeather(history[history.length-1]);
+    searchInputRun(history[history.length-1]);
 }
 for (var i = 0; i < history.length; i++){
     makeRow(history[i]);
