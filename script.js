@@ -7,7 +7,8 @@ var userInputEl = $(".searchField");
 var searchButton = $(".searchbtn");
 var searchedArray = [];
 var citySearch = '';
-
+var lat = '';
+var lon = '';
 
 
 
@@ -15,8 +16,8 @@ var citySearch = '';
 $("#search-button").on("click", function (){
     console.log("ive been clicked au reviour bitch");
     event.preventDefault();
-    var searchValue = $("input").val().toUpperCase().trim();
-    searchInputRun(searchValue);
+    var citySearch = $("input").val().toUpperCase().trim();
+    searchInputRun(citySearch);
 
 })
 
@@ -58,24 +59,25 @@ function searchInputRun() {
     // empty page before starting
     currentWeatherEl.empty();
     forecastEl.empty();
+    citySearch = userInput.val();
+
+    // store api call as a var to make the function cleaner
+   forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=4c023acf398932e1b43cd03002ad8542";
 
     $.ajax({
         //connecting to API for current weather
-        method: "GET",
-        url: "https://api.openweathermap.org/data/2.5/weather?q=" + searchValue + "&appid=4c023acf398932e1b43cd03002ad8542",
-        dataType: "json",
-        success: function(data){
-            console.log(searchValue)
-            //if the city we just searched is not already in history, push to history
-            if (history.indexOf(searchValue)=== -1){
-                history.push(searchValue);
-                window.localStorage.setItem("history", JSON.stringify(history));
+        
+        url: forecastQueryURL,
+        method: "GET"
+    }).then(function(data) {
+            console.log(citySearch)
 
-                makeRow(searchValue);
-            }
+            lat = data.city.coord.lat;
+            lon = data.city.coord.lon;
+            
             //make sure old content is emptied 
-            $("#today").empty();
-            $("#today").html("<h4> Current Weather: </h4>").append("<div class=\"row\">");
+            // $("#today").empty();
+            // $("#today").html("<h4> Current Weather: </h4>").append("<div class=\"row\">");
 
             //adding HTML items for current weather 
             var title = $("<h3>").addClass("card-title").text(data.name);
@@ -85,28 +87,27 @@ function searchInputRun() {
             
             var temp = $("<p>").addClass("card-text").text("Temperature: " + ((data.main.temp- 273.15) * 1.80 + 32).toFixed(1) + " F");
             var cardBody = $("<div>").addClass("card-body");
-            var img = $("#wicon").attr("src", "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png");
+            var weatherIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + "@2x.png");
           
            
 
             //adding to page (top container for today)
-            title.append(img);
-            cardBody.append(title, temp, humid, wind);
+            title.append(weatherIcon);
+            cardBody.append(title, temp, humid, wind, weatherIcon);
             card.append(cardBody);
             $("#today").append(card);
 
-            getForecast(searchValue);
+            getForecast(citySearch);
             // getUVIndex(data.coord.lat, data.coord.lon);
         }
-    })
-}
+    }
 
 // searches 5day forecast
-function getForecast(searchValue){
+function getForecast(citySearch){
     $.ajax({
         //connect to forecast API
         method: "GET",
-        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + searchValue + "&appid=4c023acf398932e1b43cd03002ad8542",
+        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=4c023acf398932e1b43cd03002ad8542",
         dataType: "json",
         success: function(data){
             console.log(data)
@@ -172,4 +173,3 @@ function makeRow(){
         
     }
 }
-})
