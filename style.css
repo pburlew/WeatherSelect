@@ -1,4 +1,4 @@
-header{
+/* header{
     background-color: #0b64a3;
     border-radius: 25px;
     color: white;
@@ -35,4 +35,54 @@ body{
 
 #search-button{
     background-color: #0b64a3;
+} */
+
+body{
+    margin: 0
+    font-size: 18px;
+    font-family: 'Nunito', sans-serif;
+    text-align: center;
+}
+
+header {
+    background-color: #006d8f;
+    color: #FFF;
+}
+
+h1{
+    font-size: 60px;
+    text-align: center;
+    padding: 30px;
+    /* margin: 20px; */
+    
+}
+
+.container-fluid{
+    /* border: 10px solid magenta; */
+    /* margin: 50px auto; */
+    /* background-color: #639296; */
+    /* margin: 0 25px 0 25px; */
+    
+}
+
+.searchColumn{
+    
+    background-color: #b5b3ff
+    margin: 25px; 
+}
+
+.todaysWeather, .forecast{
+    
+    margin: 10px 25px;
+    border-radius: 5px;
+    background-color: #dff5e4;
+}
+
+
+#uv-low{
+    background-color: #438a71;
+}
+
+#uv-high{
+    background-color: #e60751;
 }

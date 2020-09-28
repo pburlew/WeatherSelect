@@ -1,175 +1,165 @@
 
-// vars (called using jquery and class selectors)
-var currentWeatherEl = $(".currentWeather");
+// start by using query to grab variables from html doc
+var currentConditionsEl = $(".todaysWeather");
+var currentDayEl = $("#currentDay");
 var forecastEl = $(".forecast");
-var historyEl = $(".history");
-var userInputEl = $(".searchField");
+var previousSearchesEl = $(".previousSearches");
+var userInput = $(".searchField");
 var searchButton = $(".searchbtn");
-var searchedArray = [];
+
+// variables that are empty when the page first loads
 var citySearch = '';
 var lat = '';
 var lon = '';
+var searchedArray = [];
 
 
 
-//event listeners (only 2 in whole project)- WORKING
-$("#search-button").on("click", function (){
-    console.log("ive been clicked au reviour bitch");
-    event.preventDefault();
-    var citySearch = $("input").val().toUpperCase().trim();
-    searchInputRun(citySearch);
-
-})
+loadHistorySearch();
 
 
-// DONE DONT TOUCH
-function loadHistory () {
-    // clear history
-    historyEl.empty();
-    searchedArray= JSON.parse(localStorage.getItem("searched"));
-    //if no previous searched cities, then stop/ do nothing
+// event listeners- only 2 in project
+searchButton.on("click", function () {
+    displaySearchResult();
+    loadHistorySearch();
+});
+
+$(document).on("click", ".psearch", recall);
+
+
+
+
+// FUNCTIONS
+
+function loadHistorySearch () {
+    // clear out previously added buttons
+    previousSearchesEl.empty();
+    //grab the item from local storage that was searched
+    searchedArray = JSON.parse(localStorage.getItem("searched"));
+    // if there is no item, you're good. stop looping.
     if (searchedArray === null) {
         return
+      
     } else {
         for (var i = 0; i < searchedArray.length; i++) {
-            //create a button for each value and append to the page
-            var prevSearchedBtn = $("<button>").text(searchedArray[i]).attr({
-                class: "psearch",
-            })
-            historyEl.append(prevSearchedBtn);
+    // create a button for each value and append to the page        
+        var psbutton = $("<button>").text(searchedArray[i]).attr({
+            class: "psearch",
+        
+        })
+        previousSearchesEl.append(psbutton);
         }
     }
-
 }
 
 
 
-//functions
-
-//this function uses moment.js to add current day and time in the header- 
-function showCurrentDay(){
-
-    $("#timedate-reader").text(moment().format('MMMM Do YYYY, h:mm:ss a'))
-}
-showCurrentDay();
-
-
-//searches current weather
-function searchInputRun() {
-    // empty page before starting
-    currentWeatherEl.empty();
+function displaySearchResult () {
+    // set everything to empty
+    currentConditionsEl.empty();
     forecastEl.empty();
+    // what did the user Input in the search bar?
     citySearch = userInput.val();
-
-    // store api call as a var to make the function cleaner
-   forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=4c023acf398932e1b43cd03002ad8542";
-
+    // store API as a variable to be more clean 
+    forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=4c023acf398932e1b43cd03002ad8542";
     $.ajax({
-        //connecting to API for current weather
-        
         url: forecastQueryURL,
         method: "GET"
-    }).then(function(data) {
-            console.log(citySearch)
-
-            lat = data.city.coord.lat;
-            lon = data.city.coord.lon;
+      }).then(function(r) {
+        
+        lat = r.city.coord.lat;
+        lon = r.city.coord.lon;
+        // get all measurements and add to the container on paige
+        var cityTitle = $("<h2>").text(r.city.name + "   ");
+        var dislayPic = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + r.list[0].weather[0].icon + "@2x.png");
+        var cityTemp = $("<p>").text("Temperature: " + ((r.list[0].main.temp - 273.15)*1.8+32).toFixed(0) + " degrees Fahrenheit");
+        var cityHumidity = $("<p>").text("Humidity: " + r.list[0].main.humidity + "%");
+        var windSpeed = $("<p>").text("Wind Speed: " + r.list[0].wind.speed + " MPH");
+        currentConditionsEl.append(cityTitle.append(dislayPic), cityTemp, cityHumidity, windSpeed);
+        
+        // create & call second query 
+        fullQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=19ead611ac1f13b1c00469e35bb98b61";
+        $.ajax({
+            url: fullQueryURL,
+            method: "GET"
+        }).then(function(re) {
+            console.log(re);
+            // get UVindex, 
+            var uvIndex = $("<p>").text("UV Index: " + re.current.uvi).attr("id", "uv");
+            // change new element color based on index #
+            if (re.current.uvi < 3) {uvIndex.attr("id", "uv-low")};
+            if (re.current.uvi > 8) {uvIndex.attr("id", "uv-high")};
+            currentConditionsEl.append(uvIndex);
+            // get the forcast array from the ajax call
+            var fiveDayForecast = re.daily
+            // loop through the array
+            for (var i = 1; i < 6; i++) {
+                // get date, weather icon, temp & humidity and add to div, append to page
+                var fcard = $("<div>").attr("class", "col-lg-2")
+                var fdate = $("<h6>").text(moment().add(i,'days').format("L"));
+                var ficon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + fiveDayForecast[i].weather[0].icon + "@2x.png");
+                var ftemp = $("<p>").text("Temp: " + ((fiveDayForecast[i].temp.day - 273.15)*1.8+32).toFixed(0) + "F");
+                var fhumidity = $("<p>").text("Humidity: " + fiveDayForecast[i].humidity + "%");
+                forecastEl.append(fcard.append(fdate, ficon, ftemp, fhumidity));
+            }
             
-            //make sure old content is emptied 
-            // $("#today").empty();
-            // $("#today").html("<h4> Current Weather: </h4>").append("<div class=\"row\">");
-
-            //adding HTML items for current weather 
-            var title = $("<h3>").addClass("card-title").text(data.name);
-            var card = $("<div>").addClass("card");
-            var wind = $("<p>").addClass("card-text").text("Wind Speed: " + data.wind.speed + "MPH");
-            var humid = $("<p>").addClass("card-text").text("Humidity: " + data.main.humidity + "%");
+        });
+    });
+    // get item from local storage
+    searchedArray = JSON.parse(localStorage.getItem("searched"));
+        // if no item, set to an empty array
+        if (searchedArray === null) {
+            searchedArray = [];
+        };
+        // add new user input to 
+        searchedArray.push(citySearch);
+        localStorage.setItem("searched", JSON.stringify(searchedArray));
+};
             
-            var temp = $("<p>").addClass("card-text").text("Temperature: " + ((data.main.temp- 273.15) * 1.80 + 32).toFixed(1) + " F");
-            var cardBody = $("<div>").addClass("card-body");
-            var weatherIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + "@2x.png");
-          
-           
-
-            //adding to page (top container for today)
-            title.append(weatherIcon);
-            cardBody.append(title, temp, humid, wind, weatherIcon);
-            card.append(cardBody);
-            $("#today").append(card);
-
-            getForecast(citySearch);
-            // getUVIndex(data.coord.lat, data.coord.lon);
-        }
-    }
-
-// searches 5day forecast
-function getForecast(citySearch){
+function runSecondSearch (cityName) {
+    currentConditionsEl.empty();
+    forecastEl.empty();
+    forecastQueryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityName + "&appid=4c023acf398932e1b43cd03002ad8542";
     $.ajax({
-        //connect to forecast API
-        method: "GET",
-        url: "https://api.openweathermap.org/data/2.5/forecast?q=" + citySearch + "&appid=4c023acf398932e1b43cd03002ad8542",
-        dataType: "json",
-        success: function(data){
-            console.log(data)
-        //make sure old content is emptied 
-         $("#forecast").empty();
-
-         //build new forecast cards by grabbing html elements
-         $("#forecast").html("<h4> 5 Day Forecast: </h4>").append("<div class=\"row\">");
-
-
-            for (var i = 0; i < data.list.length; i++){
-            
-            if(data.list[i].dt_txt.indexOf("12:00:00") !== -1) {
-            
-            var addToCol = $("<div>").addClass("col-md-2");
-            var cardForecast = $("<div>").addClass("card bg-primary text-white");
-            var titleForecast = $("<h5>").addClass("card-title").text(data.name);
-            // var cardForecast = $("<div>").addClass("card");
-            var humidForecast = $("<p>").addClass("card-text").text("Humidity: " + data.list[i].main.humidity + "%");
-            var tempForecast = $("<p>").addClass("card-text").text("Temperature: " + ((data.list[i].main.temp_max - 273.15) * 1.80 + 32).toFixed(1)  + " F");
-            var forecastBody = $("<div>").addClass("forecast-body p-2");
-            var imgForecast = $("#wicon").attr("src", "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png");
-            
-            addToCol.append(cardForecast.append(forecastBody.append(titleForecast, imgForecast, tempForecast, humidForecast)));
-
-            $("#forecast .row").append(addToCol);
-
+        url: forecastQueryURL,
+        method: "GET"
+        }).then(function(r) {
+        lat = r.city.coord.lat;
+        lon = r.city.coord.lon;
+        var cityTitle = $("<h2>").text(r.city.name + "   ");
+        var dislayPic = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + r.list[0].weather[0].icon + "@2x.png");
+        var cityTemp = $("<p>").text("Temperature: " + ((r.list[0].main.temp - 273.15)*1.8+32).toFixed(0) + " degrees fahrenheit");
+        var cityHumidity = $("<p>").text("Humidity: " + r.list[0].main.humidity + "%");
+        var windSpeed = $("<p>").text("Wind Speed: " + r.list[0].wind.speed + " MPH");
+        currentConditionsEl.append(cityTitle.append(dislayPic), cityTemp, cityHumidity, windSpeed);
         
-            console.log("FORECAST READ AND ADDED");
-            }
-            }
-        }
-    })
-}
+        fullQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=19ead611ac1f13b1c00469e35bb98b61";
+        $.ajax({
+            url: fullQueryURL,
+            method: "GET"
+        }).then(function(re) {
+            var uvIndex = $("<p>").text("UV Index: " + re.current.uvi).attr("id", "uv");
+            if (re.current.uvi < 3) {uvIndex.attr("id", "uv-low")};
+            if (re.current.uvi > 8) {uvIndex.attr("id", "uv-high")};
+            currentConditionsEl.append(uvIndex);
+            var fiveDayForecast = re.daily
+            console.log(fiveDayForecast);
+            for (var i = 1; i < 6; i++) {
+                var fcard = $("<div>").attr("class", "col-lg-2")
+                var fdate = $("<h6>").text(moment().add(i,'days').format("L"));
+                var ficon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + fiveDayForecast[i].weather[0].icon + "@2x.png");
+                var ftemp = $("<p>").text("Temp: " + ((fiveDayForecast[i].temp.day - 273.15)*1.8+32).toFixed(0) + "F");
+                var fhumidity = $("<p>").text("Humidity: " + fiveDayForecast[i].humidity + "%");
 
-
-
-
-function gtUVindex(lat, lon){
+                forecastEl.append(fcard.append(fdate, ficon, ftemp, fhumidity));
+            }   
+        });
+    });
     
-     
+}        
 
 
-}
-
-var history = JSON.parse(window.localStorage.getItem("history")) || [];
-
-if (history.length >0) {
-    searchInputRun(history[history.length-1]);
-}
-for (var i = 0; i < history.length; i++){
-    makeRow(history[i]);
-}
-
-function makeRow(){
-
-    $("#history").removeClass("hide");
-    //showing the last 5 cities searched
-    for (var i = 0; i < 5; i++) {
-        
-        //adding to list
-        $("<ul>").append("list-group history");
-        
-    }
+function recall () {
+    runSecondSearch($(this).text());
+    loadHistorySearch();
 }
