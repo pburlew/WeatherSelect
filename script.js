@@ -77,7 +77,7 @@ function displaySearchResult () {
         var windSpeed = $("<p>").text("Wind Speed: " + r.list[0].wind.speed + " MPH");
         currentConditionsEl.append(cityTitle.append(dislayPic), cityTemp, cityHumidity, windSpeed);
         
-        // create & call second query 
+        // create & call second query for 5day
         fullQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=19ead611ac1f13b1c00469e35bb98b61";
         $.ajax({
             url: fullQueryURL,
@@ -95,12 +95,12 @@ function displaySearchResult () {
             // loop through the array
             for (var i = 1; i < 6; i++) {
                 // get date, weather icon, temp & humidity and add to div, append to page
-                var fcard = $("<div>").attr("class", "col-lg-2")
-                var fdate = $("<h6>").text(moment().add(i,'days').format("L"));
-                var ficon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + fiveDayForecast[i].weather[0].icon + "@2x.png");
-                var ftemp = $("<p>").text("Temp: " + ((fiveDayForecast[i].temp.day - 273.15)*1.8+32).toFixed(0) + "F");
-                var fhumidity = $("<p>").text("Humidity: " + fiveDayForecast[i].humidity + "%");
-                forecastEl.append(fcard.append(fdate, ficon, ftemp, fhumidity));
+                var forecastCard = $("<div>").attr("class", "col-lg-2")
+                var forecastDate = $("<h6>").text(moment().add(i,'days').format("L"));
+                var forecastPicIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + fiveDayForecast[i].weather[0].icon + "@2x.png");
+                var forecastTemp = $("<p>").text("Temp: " + ((fiveDayForecast[i].temp.day - 273.15)*1.8+32).toFixed(0) + "F");
+                var forecastHumid = $("<p>").text("Humidity: " + fiveDayForecast[i].humidity + "%");
+                forecastEl.append(forecastCard.append(forecastDate, forecastPicIcon, forecastTemp, forecastHumid));
             }
             
         });
@@ -145,13 +145,13 @@ function runSecondSearch (cityName) {
             var fiveDayForecast = re.daily
             console.log(fiveDayForecast);
             for (var i = 1; i < 6; i++) {
-                var fcard = $("<div>").attr("class", "col-lg-2")
-                var fdate = $("<h6>").text(moment().add(i,'days').format("L"));
-                var ficon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + fiveDayForecast[i].weather[0].icon + "@2x.png");
-                var ftemp = $("<p>").text("Temp: " + ((fiveDayForecast[i].temp.day - 273.15)*1.8+32).toFixed(0) + "F");
-                var fhumidity = $("<p>").text("Humidity: " + fiveDayForecast[i].humidity + "%");
+                var forecastCard = $("<div>").attr("class", "col-lg-2")
+                var forecastDate = $("<h6>").text(moment().add(i,'days').format("L"));
+                var forecastPicIcon = $("<img>").attr("src", "http://openweathermap.org/img/wn/" + fiveDayForecast[i].weather[0].icon + "@2x.png");
+                var forecastTemp = $("<p>").text("Temp: " + ((fiveDayForecast[i].temp.day - 273.15)*1.8+32).toFixed(0) + "F");
+                var forecastHumid = $("<p>").text("Humidity: " + fiveDayForecast[i].humidity + "%");
 
-                forecastEl.append(fcard.append(fdate, ficon, ftemp, fhumidity));
+                forecastEl.append(forecastCard.append(forecastDate, forecastPicIcon, forecastTemp, forecastHumid));
             }   
         });
     });

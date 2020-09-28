@@ -1,41 +1,4 @@
-/* header{
-    background-color: #0b64a3;
-    border-radius: 25px;
-    color: white;
-    font-size: 60px;
-    text-align: center;
-    padding: 30px;
-    margin: 20px;
-}
 
-body{
-    font-family: 'Open Sans Condensed', sans-serif;
-}
-
-.container-fluid{
-    border-radius: 25px;
-    background-color:#0b64a3;
-    padding: 30px;
-    margin: 20px;
-    
-}
-
-.card{
-    background-color: #73b6e6;
-}
-
-
-#forecast, #today{
-    border-radius: 25px;
-    background-color:white;
-    padding: 30px;
-    margin: 20px;
-}
-
-
-#search-button{
-    background-color: #0b64a3;
-} */
 
 body{
     margin: 0
@@ -57,12 +20,10 @@ h1{
     
 }
 
-.container-fluid{
-    /* border: 10px solid magenta; */
-    /* margin: 50px auto; */
-    /* background-color: #639296; */
-    /* margin: 0 25px 0 25px; */
-    
+
+.btn:hover, .btn:focus {
+    background: #D4B44C;
+    color: #2E354F;
 }
 
 .searchColumn{
